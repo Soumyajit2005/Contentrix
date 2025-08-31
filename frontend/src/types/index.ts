@@ -6,6 +6,7 @@ export interface User {
   }
 }
 
+// Legacy interfaces (keep for backward compatibility)
 export interface RepurposedContent {
   title: string
   content: string
@@ -25,6 +26,8 @@ export interface UserStats {
   monthlyContent: number
   timeSaved: number
   platformCounts: Record<string, number>
+  totalProjects?: number
+  avgEngagement?: number
 }
 
 export interface ContentPiece {
@@ -37,3 +40,95 @@ export interface ContentPiece {
   title: string | null
   created_at: string
 }
+
+// New project-based interfaces
+export interface ContentFile {
+  id: string
+  fileName: string
+  size: number
+  type: 'image' | 'document' | 'video' | 'audio' | 'text'
+  url?: string
+  content?: string
+}
+
+export interface ContentAnalysis {
+  primaryCategory: string
+  secondaryCategories: string[]
+  contentType: string
+  complexity: 'beginner' | 'intermediate' | 'advanced'
+  targetAudience: string
+  tone: string
+  keyTopics: string[]
+  contentLength: string
+  engagementPotential: 'low' | 'medium' | 'high'
+  viralPotential: 'low' | 'medium' | 'high'
+  demographicAppeal: string
+}
+
+export interface PlatformSuggestion {
+  id: string
+  name: string
+  category: string
+  icon: string
+  description: string
+  relevanceScore: number
+  audience: string
+  bestFor: string
+  contentFormat: string
+  engagementStyle: string
+  competitionLevel: string
+  organicReach: string
+}
+
+export interface GeneratedContent {
+  id: string
+  platform: string
+  title: string
+  content: string
+  hashtags: string[]
+  status: 'generating' | 'complete' | 'error'
+  approved?: boolean
+  created_at: string
+  updated_at: string
+}
+
+export interface Project {
+  id: string
+  name: string
+  user_id: string
+  content_type: 'text' | 'url' | 'file'
+  original_content: string
+  analysis_results: ContentAnalysis
+  suggested_platforms: PlatformSuggestion[]
+  selected_platforms: string[]
+  status: 'draft' | 'generating' | 'review' | 'scheduled' | 'published'
+  created_at: string
+  updated_at: string
+  generatedContent?: GeneratedContent[]
+  files?: ContentFile[]
+}
+
+// Form interfaces
+export interface ProjectCreationForm {
+  name: string
+  contentType: 'text' | 'url' | 'file'
+  content?: string
+  url?: string
+  files?: File[]
+  smartDetect: boolean
+}
+
+// API Response interfaces
+export interface ProjectsResponse {
+  projects: Project[]
+  pagination: {
+    page: number
+    limit: number
+    total: number
+    pages: number
+  }
+}
+
+// Utility types
+export type ProjectStatus = 'draft' | 'generating' | 'review' | 'scheduled' | 'published'
+export type PlatformId = 'twitter' | 'linkedin' | 'instagram' | 'tiktok' | 'facebook' | 'youtube' | 'medium'

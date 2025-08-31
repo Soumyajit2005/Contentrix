@@ -6,6 +6,7 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: "primary" | "secondary" | "outline" | "ghost" | "danger";
   size?: "sm" | "md" | "lg" | "xl";
   loading?: boolean;
+  as?: "button" | "span"; // Add this line
 }
 
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(
@@ -17,6 +18,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       loading = false,
       disabled = false,
       className = "",
+      as = "button", // Add this line
       ...props
     },
     ref
@@ -53,8 +55,10 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       className
     );
 
+    const Component = as; // Add this line
+
     return (
-      <button
+      <Component
         ref={ref}
         className={classes}
         disabled={disabled || loading}
@@ -82,7 +86,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
           </svg>
         )}
         {children}
-      </button>
+      </Component>
     );
   }
 );

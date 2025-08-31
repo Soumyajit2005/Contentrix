@@ -179,7 +179,7 @@ ${originalContent}${fileContext}`
   static async analyzeContentAndSuggestPlatforms(content, files = []) {
     try {
       const fileContext = files.length > 0 
-        ? `\n\nAttached Files Analysis:\n${files.map(f => `- ${f.type.toUpperCase()} file: "${f.fileName}" (${Math.round(f.size/1024)}KB)`).join('\n')}`
+        ? `\n\nAttached Files Analysis:\n${files.map(f => `- ${f.mimetype.toUpperCase()} file: "${f.originalname}" (${Math.round(f.size/1024)}KB)`).join('\n')}`
         : '';
 
       const prompt = `As an expert content strategist with deep knowledge of digital platforms and audience behavior, analyze the following content and recommend the most effective platforms for maximum reach and engagement.
