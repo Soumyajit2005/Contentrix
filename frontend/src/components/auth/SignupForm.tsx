@@ -1,0 +1,104 @@
+"use client";
+
+import { useState } from "react";
+import { useAuth } from "@/hooks/useAuth";
+import { useRouter } from "next/navigation";
+import Button from "@/components/ui/Button";
+import Input from "@/components/ui/Input";
+import toast from "react-hot-toast";
+
+interface SignupFormProps {
+  switchToLogin: () => void;
+}
+
+const SignupForm = ({ switchToLogin }: SignupFormProps) => {
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+    fullName: "",
+  });
+  const [loading, setLoading] = useState(false);
+
+  const { signUp } = useAuth();
+  const router = useRouter();
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+
+    try {
+      await signUp(formData.email, formData.password, formData.fullName);
+      toast.success(
+        "Account created! Please check your email for verification."
+      );
+      router.push("/dashboard");
+    } catch (error: any) {
+      toast.error(error.message || "Failed to create account");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleInputChange = (field: keyof typeof formData, value: string) => {
+    setFormData((prev) => ({ ...prev, [field]: value }));
+  };
+
+  return (
+    <div className="w-full max-w-md">
+      <div className="text-center mb-8">
+        <h2 className="text-3xl font-bold text-white mb-2">Create Account</h2>
+        <p className="text-gray-300">Start repurposing your content today</p>
+      </div>
+
+      <form onSubmit={handleSubmit} className="space-y-6">
+        <Input
+          type="text"
+          label="Full Name"
+          value={formData.fullName}
+          onChange={(e) => handleInputChange("fullName", e.target.value)}
+          placeholder="Enter your full name"
+          required
+          className="bg-white/10 border-white/20 text-white placeholder-gray-400"
+        />
+
+        <Input
+          type="email"
+          label="Email"
+          value={formData.email}
+          onChange={(e) => handleInputChange("email", e.target.value)}
+          placeholder="Enter your email"
+          required
+          className="bg-white/10 border-white/20 text-white placeholder-gray-400"
+        />
+
+        <Input
+          type="password"
+          label="Password"
+          value={formData.password}
+          onChange={(e) => handleInputChange("password", e.target.value)}
+          placeholder="Create a strong password"
+          required
+          className="bg-white/10 border-white/20 text-white placeholder-gray-400"
+        />
+
+        <Button type="submit" loading={loading} className="w-full" size="lg">
+          Create Account
+        </Button>
+      </form>
+
+      <div className="mt-6 text-center">
+        <p className="text-gray-400">
+          Already have an account?{" "}
+          <button
+            onClick={switchToLogin}
+            className="text-brand-400 hover:text-brand-300 font-semibold"
+          >
+            Sign in here
+          </button>
+        </p>
+      </div>
+    </div>
+  );
+};
+
+export default SignupForm;
