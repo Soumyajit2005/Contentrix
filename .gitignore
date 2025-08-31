@@ -1,0 +1,42 @@
+# Root-level ignores for the entire project
+
+# Global OS files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Global editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Global temporary files
+*.tmp
+*.temp
+*.log
+
+# Project-specific
+*.zip
+*.tar.gz
+*.rar
+
+# Documentation builds
+docs/build/
+
+# Deployment files
+deploy/
+scripts/deploy/
+
+# IDE workspace files
+*.sublime-workspace
+*.sublime-project
+
+# Backup files
+*.bak
+*.backup
