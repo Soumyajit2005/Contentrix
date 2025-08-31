@@ -1,4 +1,4 @@
-const { model } = require('../config/gemini');
+const { model } = require("../config/gemini");
 
 class GeminiService {
   static async generateContent(prompt) {
@@ -7,8 +7,8 @@ class GeminiService {
       const response = await result.response;
       return response.text();
     } catch (error) {
-      console.error('Gemini API error:', error);
-      throw new Error('Failed to generate content with AI');
+      console.error("Gemini API error:", error);
+      throw new Error("Failed to generate content with AI");
     }
   }
 
@@ -88,7 +88,7 @@ Format your response as JSON:
 }
 
 Original content:
-${originalContent}`
+${originalContent}`,
     };
 
     return prompts[platform] || prompts.twitter;
