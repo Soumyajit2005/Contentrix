@@ -8,8 +8,8 @@ import type { User } from '@/types'
 interface AuthContextType {
   user: User | null
   loading: boolean
-  signUp: (email: string, password: string, fullName: string) => Promise<any>
-  signIn: (email: string, password: string) => Promise<any>
+  signUp: (email: string, password: string, fullName: string) => Promise<{ user?: unknown; error?: string }>
+  signIn: (email: string, password: string) => Promise<{ user?: unknown; error?: string }>
   signOut: () => Promise<void>
 }
 

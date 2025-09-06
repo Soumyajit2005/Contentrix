@@ -1,22 +1,18 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState } from "react";
 import { 
   Upload, 
   FileText, 
   Link, 
-  Image, 
-  Video, 
   File,
   X,
-  Sparkles,
-  ArrowRight,
-  AlertCircle
+  Sparkles
 } from "lucide-react";
 import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
 import toast from "react-hot-toast";
-import type { ProjectCreationForm, ContentFile } from "@/types";
+import type { ProjectCreationForm } from "@/types";
 import api from "@/lib/api";
 
 interface ProjectCreationProps {
@@ -25,7 +21,6 @@ interface ProjectCreationProps {
 }
 
 const ProjectCreation = ({ onProjectCreated, onCancel }: ProjectCreationProps) => {
-  const [step, setStep] = useState(1);
   const [form, setForm] = useState<ProjectCreationForm>({
     name: "",
     contentType: "text",
@@ -33,7 +28,6 @@ const ProjectCreation = ({ onProjectCreated, onCancel }: ProjectCreationProps) =
   });
   const [files, setFiles] = useState<File[]>([]);
   const [loading, setLoading] = useState(false);
-  const [analysisResults, setAnalysisResults] = useState(null);
 
   // File upload handling
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -78,7 +72,6 @@ const ProjectCreation = ({ onProjectCreated, onCancel }: ProjectCreationProps) =
         },
       });
       
-      setAnalysisResults(response.data);
       toast.success("Project created successfully!");
       onProjectCreated(response.data.id);
     } catch (error) {
@@ -148,7 +141,7 @@ const ProjectCreation = ({ onProjectCreated, onCancel }: ProjectCreationProps) =
               <button
                 key={type}
                 type="button"
-                onClick={() => handleContentTypeChange(type as any)}
+                onClick={() => handleContentTypeChange(type as 'text' | 'url' | 'file')}
                 className={`p-6 border-2 rounded-lg text-center transition-all ${
                   form.contentType === type
                     ? 'border-brand-500 bg-brand-50 text-brand-700'

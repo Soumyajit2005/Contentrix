@@ -27,8 +27,9 @@ const LoginForm = ({ switchToSignup }: LoginFormProps) => {
       await signIn(email, password);
       toast.success("Welcome back!");
       router.push("/dashboard");
-    } catch (error: any) {
-      toast.error(error.message || "Failed to sign in");
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : "Failed to sign in";
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -69,7 +70,7 @@ const LoginForm = ({ switchToSignup }: LoginFormProps) => {
 
       <div className="mt-6 text-center">
         <p className="text-gray-400">
-          Don't have an account?{" "}
+          Don&apos;t have an account?{" "}
           <button
             onClick={switchToSignup}
             className="text-brand-400 hover:text-brand-300 font-semibold"

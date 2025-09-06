@@ -1,15 +1,19 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useCallback } from "react";
 import { TrendingUp, Clock, Zap, FileText } from "lucide-react";
 import { useContent } from "@/hooks/useContent";
 
 const StatsPanel = () => {
   const { stats, getUserStats } = useContent();
 
-  useEffect(() => {
+  const loadStats = useCallback(() => {
     getUserStats();
-  }, []);
+  }, [getUserStats]);
+
+  useEffect(() => {
+    loadStats();
+  }, [loadStats]);
 
   const statCards = [
     {

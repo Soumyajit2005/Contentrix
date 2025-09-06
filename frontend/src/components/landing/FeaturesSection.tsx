@@ -71,7 +71,7 @@ const FeaturesSection = () => {
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
             Transform your content for every major platform with AI that
-            understands each platform's unique requirements.
+            understands each platform&apos;s unique requirements.
           </p>
         </div>
 

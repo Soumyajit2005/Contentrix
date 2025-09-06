@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from 'react';
 import { 
   Plus, 
   Search, 
@@ -19,7 +19,7 @@ import ContentOutput from "./ContentOutput";
 import { useContent } from "@/hooks/useContent";
 import api from "@/lib/api";
 import toast from "react-hot-toast";
-import type { Project, ProjectsResponse, RepurposedContent } from "@/types";
+import type { Project, RepurposedContent } from "@/types";
 
 const Dashboard = () => {
   const [view, setView] = useState<'overview' | 'create' | 'project' | 'legacy'>('overview');
@@ -34,11 +34,7 @@ const Dashboard = () => {
   const [currentResult, setCurrentResult] = useState<RepurposedContent | null>(null);
   const { loading: legacyLoading } = useContent();
 
-  useEffect(() => {
-    loadProjects();
-  }, [searchQuery, filterStatus]);
-
-  const loadProjects = async () => {
+  const loadProjects = useCallback(async () => {
     try {
       setLoading(true);
       const params = new URLSearchParams({
@@ -50,13 +46,17 @@ const Dashboard = () => {
 
       const response = await api.get(`/projects?${params}`);
       setProjects(response.data.projects || []);
-    } catch (error) {
-      console.error('Failed to load projects:', error);
-      toast.error('Failed to load projects');
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'Failed to load projects';
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }
-  };
+  }, [filterStatus, searchQuery]);
+
+  useEffect(() => {
+    loadProjects();
+  }, [searchQuery, filterStatus, loadProjects]);
 
   const handleProjectCreated = (projectId: string) => {
     setCurrentProjectId(projectId);
@@ -175,7 +175,7 @@ const Dashboard = () => {
           <div className="relative">
             <select
               value={filterStatus}
-              onChange={(e) => setFilterStatus(e.target.value as any)}
+              onChange={(e) => setFilterStatus(e.target.value as 'all' | 'draft' | 'generating' | 'review' | 'published')}
               className="appearance-none bg-white border border-gray-300 rounded-lg px-4 py-2 pr-8 focus:ring-2 focus:ring-brand-500 focus:border-transparent"
             >
               <option value="all">All Status</option>
@@ -259,7 +259,6 @@ const Dashboard = () => {
               project={project}
               viewMode={viewMode}
               onClick={() => handleProjectClick(project.id)}
-              onStatusUpdate={loadProjects}
             />
           ))}
         </div>

@@ -1,24 +1,19 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { 
   ArrowLeft, 
-  Settings, 
   Zap, 
   Check,
   X,
-  Edit3,
   RefreshCw,
   Copy,
   Calendar,
-  Sparkles,
   Download,
   Share2,
   FileText,
-  Users,
   Target,
   TrendingUp,
-  Lightbulb,
   Clock
 } from "lucide-react";
 import Button from "@/components/ui/Button";
@@ -83,11 +78,7 @@ const ProjectWorkspace = ({ projectId, onBack, onProjectUpdate }: ProjectWorkspa
     }
   };
 
-  useEffect(() => {
-    loadProject();
-  }, [projectId]);
-
-  const loadProject = async () => {
+  const loadProject = useCallback(async () => {
     try {
       setLoading(true);
       const response = await api.get(`/projects/${projectId}`);
@@ -99,7 +90,11 @@ const ProjectWorkspace = ({ projectId, onBack, onProjectUpdate }: ProjectWorkspa
     } finally {
       setLoading(false);
     }
-  };
+  }, [projectId]);
+
+  useEffect(() => {
+    loadProject();
+  }, [loadProject]);
 
   const handleGenerateContent = async () => {
     if (selectedPlatforms.length === 0) {
@@ -140,7 +135,7 @@ const ProjectWorkspace = ({ projectId, onBack, onProjectUpdate }: ProjectWorkspa
     try {
       await navigator.clipboard.writeText(content);
       toast.success('Content copied to clipboard!');
-    } catch (error) {
+    } catch {
       toast.error('Failed to copy content');
     }
   };
@@ -648,7 +643,7 @@ const ProjectWorkspace = ({ projectId, onBack, onProjectUpdate }: ProjectWorkspa
             {tabs.map((tab) => (
               <button
                 key={tab.id}
-                onClick={() => setActiveTab(tab.id as any)}
+                onClick={() => setActiveTab(tab.id as 'overview' | 'content' | 'schedule')}
                 className={`py-2 px-1 border-b-2 font-medium text-sm ${
                   activeTab === tab.id
                     ? 'border-brand-500 text-brand-600'

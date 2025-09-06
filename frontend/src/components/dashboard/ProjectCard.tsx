@@ -2,7 +2,6 @@
 
 import { 
   Calendar, 
-  Users, 
   Target, 
   MoreHorizontal,
   CheckCircle,
@@ -17,10 +16,9 @@ interface ProjectCardProps {
   project: Project;
   viewMode: 'grid' | 'list';
   onClick: () => void;
-  onStatusUpdate: () => void;
 }
 
-const ProjectCard = ({ project, viewMode, onClick, onStatusUpdate }: ProjectCardProps) => {
+const ProjectCard = ({ project, viewMode, onClick }: ProjectCardProps) => {
   const getStatusColor = (status: Project['status']) => {
     switch (status) {
       case 'draft': return 'bg-gray-100 text-gray-700';

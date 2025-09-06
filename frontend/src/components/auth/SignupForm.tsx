@@ -32,8 +32,9 @@ const SignupForm = ({ switchToLogin }: SignupFormProps) => {
         "Account created! Please check your email for verification."
       );
       router.push("/dashboard");
-    } catch (error: any) {
-      toast.error(error.message || "Failed to create account");
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : "Failed to create account";
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }

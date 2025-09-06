@@ -20,8 +20,8 @@ export const useContent = () => {
 
       toast.success('Content repurposed successfully!')
       return response.data
-    } catch (error: any) {
-      const message = error.response?.data?.error || 'Failed to repurpose content'
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : 'Failed to repurpose content'
       toast.error(message)
       throw error
     } finally {
@@ -34,8 +34,8 @@ export const useContent = () => {
       const response = await api.get(`/content/history?page=${page}&limit=${limit}`)
       setHistory(response.data.content)
       return response.data
-    } catch (error: any) {
-      const message = error.response?.data?.error || 'Failed to fetch content history'
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : 'Failed to fetch content history'
       toast.error(message)
       throw error
     }
@@ -48,8 +48,8 @@ export const useContent = () => {
       
       // Remove from local state
       setHistory(prev => prev.filter(item => item.id !== contentId))
-    } catch (error: any) {
-      const message = error.response?.data?.error || 'Failed to delete content'
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : 'Failed to delete content'
       toast.error(message)
       throw error
     }
