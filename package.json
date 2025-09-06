@@ -1,0 +1,27 @@
+{
+  "name": "repurpose-pie",
+  "version": "1.0.0",
+  "description": "AI-Powered Content Repurposing Platform",
+  "scripts": {
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "dev:frontend": "cd frontend && npm run dev",
+    "dev:backend": "cd backend && npm run dev",
+    "build": "npm run build:frontend",
+    "build:frontend": "cd frontend && npm run build",
+    "start": "npm run start:frontend",
+    "start:frontend": "cd frontend && npm run start",
+    "install:all": "npm install && cd frontend && npm install && cd ../backend && npm install",
+    "deploy": "vercel"
+  },
+  "keywords": ["ai", "content", "repurposing", "social-media", "nextjs", "nodejs"],
+  "author": "Soumyajit2005",
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^9.2.1",
+    "vercel": "^37.7.2"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
+  }
+}
