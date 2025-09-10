@@ -26,7 +26,7 @@ const HeroSection = ({ onGetStarted }: HeroSectionProps) => {
             Transform your content into platform-perfect posts in seconds.
             <span className="text-yellow-400 font-semibold">
               {" "}
-              Save 8-12 hours weekly
+              Save hours of work
             </span>{" "}
             with AI-powered repurposing.
           </p>
@@ -48,21 +48,21 @@ const HeroSection = ({ onGetStarted }: HeroSectionProps) => {
             </Button>
           </div>
 
-          {/* Stats */}
+          {/* Features */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-16">
             <div className="bg-black/20 backdrop-blur-sm rounded-xl p-6 border border-white/10">
               <div className="text-4xl font-bold text-yellow-400 mb-2">
-                8-12hrs
+                AI-Powered
               </div>
-              <div className="text-gray-300">Saved weekly per creator</div>
+              <div className="text-gray-300">Intelligent content adaptation</div>
             </div>
             <div className="bg-black/20 backdrop-blur-sm rounded-xl p-6 border border-white/10">
-              <div className="text-4xl font-bold text-yellow-400 mb-2">$5K</div>
-              <div className="text-gray-300">MRR achieved in days</div>
-            </div>
-            <div className="bg-black/20 backdrop-blur-sm rounded-xl p-6 border border-white/10">
-              <div className="text-4xl font-bold text-yellow-400 mb-2">4+</div>
+              <div className="text-4xl font-bold text-yellow-400 mb-2">10+</div>
               <div className="text-gray-300">Platform formats supported</div>
+            </div>
+            <div className="bg-black/20 backdrop-blur-sm rounded-xl p-6 border border-white/10">
+              <div className="text-4xl font-bold text-yellow-400 mb-2">Fast</div>
+              <div className="text-gray-300">Content ready in seconds</div>
             </div>
           </div>
         </div>

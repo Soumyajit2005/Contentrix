@@ -44,11 +44,16 @@ export interface ContentPiece {
 // New project-based interfaces
 export interface ContentFile {
   id: string
-  fileName: string
-  size: number
-  type: 'image' | 'document' | 'video' | 'audio' | 'text'
+  project_id: string
+  user_id?: string
+  file_name: string
+  file_path: string
+  file_size: number
+  file_type: 'image' | 'document' | 'video' | 'audio' | 'text'
+  mime_type: string
   url?: string
   content?: string
+  created_at: string
 }
 
 export interface ContentAnalysis {
@@ -82,12 +87,17 @@ export interface PlatformSuggestion {
 
 export interface GeneratedContent {
   id: string
+  project_id: string
+  user_id: string
   platform: string
   title: string
   content: string
   hashtags: string[]
+  guidance?: Record<string, unknown>
   status: 'generating' | 'complete' | 'error'
   approved?: boolean
+  approved_at?: string | null
+  error_message?: string
   created_at: string
   updated_at: string
 }

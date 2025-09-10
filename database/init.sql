@@ -169,6 +169,80 @@ CREATE TRIGGER update_generated_content_updated_at BEFORE UPDATE ON public.gener
 CREATE TRIGGER update_user_preferences_updated_at BEFORE UPDATE ON public.user_preferences
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
+-- Legacy compatibility tables (for backend compatibility)
+-- Profiles table (duplicate of users for legacy support)
+CREATE TABLE IF NOT EXISTS public.profiles (
+  id UUID REFERENCES auth.users ON DELETE CASCADE PRIMARY KEY,
+  email TEXT,
+  full_name TEXT,
+  avatar_url TEXT,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Repurposed content table (legacy format for backward compatibility)
+CREATE TABLE IF NOT EXISTS public.repurposed_content (
+  id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+  user_id UUID REFERENCES auth.users ON DELETE CASCADE,
+  original_content TEXT NOT NULL,
+  platform TEXT NOT NULL,
+  repurposed_content TEXT NOT NULL,
+  hashtags TEXT[],
+  title TEXT,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Project files table (alias for content_files for backend compatibility)
+CREATE TABLE IF NOT EXISTS public.project_files (
+  id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+  project_id UUID REFERENCES public.projects(id) ON DELETE CASCADE,
+  filename TEXT NOT NULL,
+  file_path TEXT NOT NULL,
+  file_size INTEGER,
+  mime_type TEXT,
+  file_url TEXT,
+  processed BOOLEAN DEFAULT FALSE,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Enable RLS for new tables
+ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.repurposed_content ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.project_files ENABLE ROW LEVEL SECURITY;
+
+-- RLS Policies for profiles table
+CREATE POLICY "Users can view own profile" ON public.profiles
+  FOR SELECT USING (auth.uid() = id);
+
+CREATE POLICY "Users can update own profile" ON public.profiles
+  FOR UPDATE USING (auth.uid() = id);
+
+CREATE POLICY "Users can insert own profile" ON public.profiles
+  FOR INSERT WITH CHECK (auth.uid() = id);
+
+-- RLS Policies for repurposed_content table
+CREATE POLICY "Users can view own repurposed content" ON public.repurposed_content
+  FOR SELECT USING (auth.uid() = user_id);
+
+CREATE POLICY "Users can manage own repurposed content" ON public.repurposed_content
+  FOR ALL USING (auth.uid() = user_id);
+
+-- RLS Policies for project_files table
+CREATE POLICY "Users can view own project files" ON public.project_files
+  FOR SELECT USING (auth.uid() = (SELECT user_id FROM public.projects WHERE id = project_id));
+
+CREATE POLICY "Users can manage own project files" ON public.project_files
+  FOR ALL USING (auth.uid() = (SELECT user_id FROM public.projects WHERE id = project_id));
+
+-- Create indexes for new tables
+CREATE INDEX IF NOT EXISTS idx_profiles_id ON public.profiles(id);
+CREATE INDEX IF NOT EXISTS idx_repurposed_content_user_id ON public.repurposed_content(user_id);
+CREATE INDEX IF NOT EXISTS idx_project_files_project_id ON public.project_files(project_id);
+
+-- Create triggers for updated_at columns
+CREATE TRIGGER update_profiles_updated_at BEFORE UPDATE ON public.profiles
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
 -- Insert some sample platform configurations (optional)
 -- You can customize these based on your supported platforms
 INSERT INTO public.content_history (user_id, action, content_data) 

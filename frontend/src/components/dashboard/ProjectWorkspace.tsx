@@ -35,45 +35,38 @@ const ProjectWorkspace = ({ projectId, onBack, onProjectUpdate }: ProjectWorkspa
   const [activeTab, setActiveTab] = useState<'overview' | 'content' | 'schedule'>('content');
   const [expandedContent, setExpandedContent] = useState<string | null>(null);
 
-  // Helper function to parse JSON content
+  // Helper function to parse JSONB content from database
   const parseContentData = (content: GeneratedContent) => {
     try {
-      let jsonString = content.content;
+      // Content is now stored as JSONB in the database
+      let contentData;
       
-      // Remove markdown code block formatting if present
-      if (jsonString.includes('```json')) {
-        jsonString = jsonString.replace(/```json\s*\n?/g, '').replace(/\n?\s*```/g, '');
-      } else if (jsonString.includes('```')) {
-        jsonString = jsonString.replace(/```\s*\n?/g, '').replace(/\n?\s*```/g, '');
+      if (typeof content.content === 'string') {
+        // Try to parse string content
+        contentData = JSON.parse(content.content);
+      } else if (typeof content.content === 'object') {
+        // Already an object (JSONB)
+        contentData = content.content;
+      } else {
+        throw new Error('Invalid content format');
       }
-      
-      // Clean up extra whitespace
-      jsonString = jsonString.trim();
-      
-      const parsed = JSON.parse(jsonString);
-      
-      // If the parsed object has a content field, it means the entire JSON was stored
-      // Otherwise, the content field itself is the actual content
-      const actualContent = parsed.content || jsonString;
-      const actualTitle = parsed.title || content.title;
-      const actualHashtags = parsed.hashtags || content.hashtags || [];
       
       return {
         ...content,
-        parsedContent: parsed,
-        displayContent: actualContent,
-        title: actualTitle,
-        hashtags: actualHashtags
+        parsedContent: contentData,
+        displayContent: contentData.content || contentData.text || 'No content available',
+        title: contentData.title || content.title || `${content.platform} Post`,
+        hashtags: contentData.hashtags || []
       };
     } catch (error) {
-      console.error('Failed to parse content JSON:', error);
-      // If parsing fails, treat the content as plain text
+      console.error('Failed to parse content:', error);
+      // Fallback for invalid content
       return {
         ...content,
         parsedContent: null,
-        displayContent: content.content,
-        title: content.title,
-        hashtags: content.hashtags || []
+        displayContent: typeof content.content === 'string' ? content.content : 'Invalid content format',
+        title: content.title || `${content.platform} Post`,
+        hashtags: []
       };
     }
   };

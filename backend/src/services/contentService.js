@@ -173,12 +173,11 @@ class ContentService {
           .from('project_files')
           .insert({
             project_id: projectId,
-            user_id: userId,
-            file_name: file.originalname,
+            filename: file.originalname,
             file_path: uploadData.path,
             file_size: file.size,
-            file_type: ContentService.getFileType(file.mimetype),
-            mime_type: file.mimetype
+            mime_type: file.mimetype,
+            processed: false
           })
           .select()
           .single();
@@ -278,13 +277,14 @@ class ContentService {
             .from('generated_content')
             .insert({
               project_id: projectId,
-              user_id: userId,
               platform,
-              title: parsedContent.title,
-              content: parsedContent.content,
-              hashtags: parsedContent.hashtags || [],
-              guidance: parsedContent.guidance || {},
-              status: 'complete'
+              content: {
+                title: parsedContent.title,
+                content: parsedContent.content,
+                hashtags: parsedContent.hashtags || [],
+                guidance: parsedContent.guidance || {}
+              },
+              status: 'draft'
             })
             .select()
             .single();
@@ -299,10 +299,9 @@ class ContentService {
             .from('generated_content')
             .insert({
               project_id: projectId,
-              user_id: userId,
               platform,
-              status: 'error',
-              error_message: error.message
+              content: { error: error.message },
+              status: 'rejected'
             });
           
           return null;
@@ -428,11 +427,11 @@ class ContentService {
       const { data, error } = await supabase
         .from('generated_content')
         .update({
-          ...updates,
+          content: updates.content || updates,
+          status: updates.status || 'draft',
           updated_at: new Date().toISOString()
         })
         .eq('id', contentId)
-        .eq('user_id', userId)
         .select()
         .single();
 
@@ -450,12 +449,11 @@ class ContentService {
       const { data, error } = await supabase
         .from('generated_content')
         .update({
-          approved,
-          approved_at: approved ? new Date().toISOString() : null,
+          status: approved ? 'approved' : 'draft',
+          scheduled_date: approved ? new Date().toISOString() : null,
           updated_at: new Date().toISOString()
         })
         .eq('id', contentId)
-        .eq('user_id', userId)
         .select()
         .single();
 
@@ -476,11 +474,13 @@ class ContentService {
         .select('*', { count: 'exact', head: true })
         .eq('user_id', userId);
 
-      // Get total generated content
-      const { count: totalContent } = await supabase
+      // Get total generated content by joining with projects
+      const { data: contentData } = await supabase
         .from('generated_content')
-        .select('*', { count: 'exact', head: true })
-        .eq('user_id', userId);
+        .select('id, project_id, projects!inner(user_id)')
+        .eq('projects.user_id', userId);
+      
+      const totalContent = contentData ? contentData.length : 0;
 
       // Get this month's projects
       const startOfMonth = new Date();
@@ -493,11 +493,11 @@ class ContentService {
         .eq('user_id', userId)
         .gte('created_at', startOfMonth.toISOString());
 
-      // Get platform distribution
+      // Get platform distribution by joining with projects
       const { data: platformData } = await supabase
         .from('generated_content')
-        .select('platform')
-        .eq('user_id', userId);
+        .select('platform, projects!inner(user_id)')
+        .eq('projects.user_id', userId);
 
       const platformCounts = (platformData || []).reduce((acc, item) => {
         acc[item.platform] = (acc[item.platform] || 0) + 1;
