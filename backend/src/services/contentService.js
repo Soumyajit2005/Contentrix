@@ -112,12 +112,18 @@ class ContentService {
     try {
       const { name, contentType, content, url, files, smartDetect } = projectData;
 
+      console.log('Starting AI analysis...');
       // Analyze content and suggest platforms
       const analysis = await GeminiService.analyzeContentAndSuggestPlatforms(
-        content || url || '', 
+        content || url || '',
         files || []
       );
+      console.log('AI analysis completed:', {
+        category: analysis.contentAnalysis?.primaryCategory,
+        platformCount: analysis.suggestedPlatforms?.length
+      });
 
+      console.log('Inserting project to database...');
       // Create project record
       const { data: project, error } = await supabase
         .from('projects')
@@ -128,7 +134,7 @@ class ContentService {
           original_content: content || url || '',
           analysis_results: analysis.contentAnalysis,
           suggested_platforms: analysis.suggestedPlatforms,
-          selected_platforms: smartDetect 
+          selected_platforms: smartDetect
             ? analysis.suggestedPlatforms.slice(0, 3).map(p => p.id)
             : [],
           status: 'draft'
@@ -136,10 +142,16 @@ class ContentService {
         .select()
         .single();
 
-      if (error) throw error;
+      if (error) {
+        console.error('Database insert error:', error);
+        throw error;
+      }
+
+      console.log('Project inserted successfully');
 
       // Handle file uploads if any
       if (files && files.length > 0) {
+        console.log('Handling file uploads...');
         await ContentService.handleFileUploads(project.id, files, userId);
       }
 

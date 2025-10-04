@@ -12,7 +12,7 @@ interface ExtendedAxiosRequestConfig extends InternalAxiosRequestConfig {
 // Create axios instance with enhanced configuration
 const api: AxiosInstance = axios.create({
     baseURL: API_BASE_URL,
-    timeout: 30000, // 30 second timeout
+    timeout: 120000, // 120 second timeout (2 minutes) for AI operations
     headers: {
         'Content-Type': 'application/json',
     },

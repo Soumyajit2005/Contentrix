@@ -48,7 +48,7 @@ const SignupForm = ({ switchToLogin }: SignupFormProps) => {
     <div className="w-full max-w-md">
       <div className="text-center mb-8">
         <h2 className="text-3xl font-bold text-white mb-2">Create Account</h2>
-        <p className="text-gray-300">Start repurposing your content today</p>
+        <p className="text-gray-300">Start transforming your content today</p>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
@@ -59,7 +59,7 @@ const SignupForm = ({ switchToLogin }: SignupFormProps) => {
           onChange={(e) => handleInputChange("fullName", e.target.value)}
           placeholder="Enter your full name"
           required
-          className="bg-white/10 border-white/20 text-white placeholder-gray-400"
+          className="bg-white/10 border-white/20 text-white placeholder-gray-400 focus:border-purple-400 focus:ring-2 focus:ring-purple-400/50 transition-all"
         />
 
         <Input
@@ -69,7 +69,7 @@ const SignupForm = ({ switchToLogin }: SignupFormProps) => {
           onChange={(e) => handleInputChange("email", e.target.value)}
           placeholder="Enter your email"
           required
-          className="bg-white/10 border-white/20 text-white placeholder-gray-400"
+          className="bg-white/10 border-white/20 text-white placeholder-gray-400 focus:border-purple-400 focus:ring-2 focus:ring-purple-400/50 transition-all"
         />
 
         <Input
@@ -79,10 +79,15 @@ const SignupForm = ({ switchToLogin }: SignupFormProps) => {
           onChange={(e) => handleInputChange("password", e.target.value)}
           placeholder="Create a strong password"
           required
-          className="bg-white/10 border-white/20 text-white placeholder-gray-400"
+          className="bg-white/10 border-white/20 text-white placeholder-gray-400 focus:border-purple-400 focus:ring-2 focus:ring-purple-400/50 transition-all"
         />
 
-        <Button type="submit" loading={loading} className="w-full" size="lg">
+        <Button
+          type="submit"
+          loading={loading}
+          className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 hover:shadow-xl hover:scale-105 transition-all"
+          size="lg"
+        >
           Create Account
         </Button>
       </form>
@@ -92,7 +97,7 @@ const SignupForm = ({ switchToLogin }: SignupFormProps) => {
           Already have an account?{" "}
           <button
             onClick={switchToLogin}
-            className="text-brand-400 hover:text-brand-300 font-semibold"
+            className="text-purple-300 hover:text-purple-200 font-semibold transition-colors"
           >
             Sign in here
           </button>

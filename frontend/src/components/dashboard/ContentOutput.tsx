@@ -68,14 +68,22 @@ const ContentOutput = ({ result, loading }: ContentOutputProps) => {
 
   if (loading) {
     return (
-      <div className="bg-white rounded-xl shadow-sm border p-6">
-        <h2 className="text-xl font-semibold text-gray-900 mb-6 flex items-center gap-2">
-          <Sparkles className="h-5 w-5 text-brand-500" />
+      <div className="bg-white rounded-2xl shadow-xl border border-purple-100 p-6 animate-fadeIn">
+        <h2 className="text-xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent mb-6 flex items-center gap-2">
+          <div className="p-2 bg-gradient-to-r from-purple-100 to-blue-100 rounded-lg">
+            <Sparkles className="h-5 w-5 text-purple-600" />
+          </div>
           Repurposed Content
         </h2>
         <div className="text-center py-12">
-          <div className="animate-spin rounded-full h-12 w-12 border-4 border-brand-500 border-t-transparent mx-auto mb-4"></div>
-          <p className="text-gray-600">AI is repurposing your content...</p>
+          <div className="relative">
+            <div className="animate-spin rounded-full h-16 w-16 border-4 border-purple-200 border-t-purple-600 mx-auto mb-6"></div>
+            <div className="absolute inset-0 flex items-center justify-center">
+              <Sparkles className="h-6 w-6 text-purple-600 animate-pulse" />
+            </div>
+          </div>
+          <p className="text-gray-600 font-medium">AI is repurposing your content...</p>
+          <p className="text-gray-400 text-sm mt-2">This may take a moment ✨</p>
         </div>
       </div>
     );
@@ -83,43 +91,53 @@ const ContentOutput = ({ result, loading }: ContentOutputProps) => {
 
   if (!result) {
     return (
-      <div className="bg-white rounded-xl shadow-sm border p-6">
-        <h2 className="text-xl font-semibold text-gray-900 mb-6 flex items-center gap-2">
-          <Sparkles className="h-5 w-5 text-brand-500" />
+      <div className="bg-white rounded-2xl shadow-xl border border-purple-100 p-6 animate-fadeIn">
+        <h2 className="text-xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent mb-6 flex items-center gap-2">
+          <div className="p-2 bg-gradient-to-r from-purple-100 to-blue-100 rounded-lg">
+            <Sparkles className="h-5 w-5 text-purple-600" />
+          </div>
           Repurposed Content
         </h2>
         <div className="text-center py-12 text-gray-500">
-          <FileText className="h-12 w-12 text-gray-300 mx-auto mb-4" />
-          <p>Your repurposed content will appear here</p>
+          <div className="relative mx-auto w-24 h-24 mb-6">
+            <div className="absolute inset-0 bg-gradient-to-br from-purple-100 to-blue-100 rounded-full animate-pulse"></div>
+            <FileText className="h-12 w-12 text-purple-400 absolute inset-0 m-auto" />
+          </div>
+          <p className="text-gray-600 font-medium">Your repurposed content will appear here</p>
+          <p className="text-gray-400 text-sm mt-2">Start by pasting your content on the left</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border p-6">
-      <h2 className="text-xl font-semibold text-gray-900 mb-6 flex items-center gap-2">
-        <Sparkles className="h-5 w-5 text-brand-500" />
+    <div className="bg-white rounded-2xl shadow-xl border border-purple-100 p-6 animate-fadeIn">
+      <h2 className="text-xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent mb-6 flex items-center gap-2">
+        <div className="p-2 bg-gradient-to-r from-purple-100 to-blue-100 rounded-lg">
+          <Sparkles className="h-5 w-5 text-purple-600" />
+        </div>
         Repurposed Content
       </h2>
 
       <div className="space-y-6">
         {/* Content Header with Title */}
-        <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+        <div className="bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-xl p-4 shadow-sm">
           <div className="flex items-center gap-2 text-green-800 mb-2">
-            <Check className="h-5 w-5" />
-            <span className="font-semibold">{parsedContent?.title || result?.title}</span>
+            <div className="p-1.5 bg-green-500 rounded-full">
+              <Check className="h-4 w-4 text-white" />
+            </div>
+            <span className="font-bold">{parsedContent?.title || result?.title}</span>
           </div>
         </div>
 
         {/* Tab Navigation */}
-        <div className="flex space-x-1 bg-gray-100 p-1 rounded-lg">
+        <div className="flex space-x-2 bg-gradient-to-r from-purple-100 to-blue-100 p-1.5 rounded-xl shadow-inner">
           <button
             onClick={() => setActiveSection('content')}
-            className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors ${
+            className={`flex-1 py-3 px-4 rounded-lg text-sm font-semibold transition-all duration-300 ${
               activeSection === 'content'
-                ? 'bg-white text-gray-900 shadow-sm'
-                : 'text-gray-600 hover:text-gray-900'
+                ? 'bg-white text-purple-700 shadow-md scale-105'
+                : 'text-gray-600 hover:text-purple-700'
             }`}
           >
             Generated Content
@@ -127,10 +145,10 @@ const ContentOutput = ({ result, loading }: ContentOutputProps) => {
           {parsedContent?.guidance && (
             <button
               onClick={() => setActiveSection('guidance')}
-              className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors ${
+              className={`flex-1 py-3 px-4 rounded-lg text-sm font-semibold transition-all duration-300 ${
                 activeSection === 'guidance'
-                  ? 'bg-white text-gray-900 shadow-sm'
-                  : 'text-gray-600 hover:text-gray-900'
+                  ? 'bg-white text-purple-700 shadow-md scale-105'
+                  : 'text-gray-600 hover:text-purple-700'
               }`}
             >
               Publishing Guide

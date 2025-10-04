@@ -56,15 +56,33 @@ router.post('/', authenticateUser, upload.array('files', 10), async (req, res) =
       files: req.files || []
     };
 
+    console.log('Creating project:', {
+      name: projectData.name,
+      contentType: projectData.contentType,
+      hasContent: !!projectData.content,
+      hasUrl: !!projectData.url,
+      filesCount: projectData.files.length,
+      userId
+    });
+
     if (!projectData.name?.trim()) {
       return res.status(400).json({ error: 'Project name is required' });
     }
 
+    if (!projectData.content && !projectData.url && projectData.files.length === 0) {
+      return res.status(400).json({ error: 'Content, URL, or files are required' });
+    }
+
     const result = await createProject(projectData, userId);
+    console.log('Project created successfully:', result.id);
     res.json(result);
   } catch (error) {
     console.error('Create project error:', error);
-    res.status(500).json({ error: 'Failed to create project' });
+    console.error('Error stack:', error.stack);
+    res.status(500).json({
+      error: 'Failed to create project',
+      message: process.env.NODE_ENV === 'development' ? error.message : undefined
+    });
   }
 });
 

@@ -39,7 +39,7 @@ const LoginForm = ({ switchToSignup }: LoginFormProps) => {
     <div className="w-full max-w-md">
       <div className="text-center mb-8">
         <h2 className="text-3xl font-bold text-white mb-2">Welcome Back</h2>
-        <p className="text-gray-300">Sign in to your RepurposePie account</p>
+        <p className="text-gray-300">Sign in to your Contentrix account</p>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
@@ -50,7 +50,7 @@ const LoginForm = ({ switchToSignup }: LoginFormProps) => {
           onChange={(e) => setEmail(e.target.value)}
           placeholder="Enter your email"
           required
-          className="bg-white/10 border-white/20 text-white placeholder-gray-400"
+          className="bg-white/10 border-white/20 text-white placeholder-gray-400 focus:border-purple-400 focus:ring-2 focus:ring-purple-400/50 transition-all"
         />
 
         <Input
@@ -60,10 +60,15 @@ const LoginForm = ({ switchToSignup }: LoginFormProps) => {
           onChange={(e) => setPassword(e.target.value)}
           placeholder="Enter your password"
           required
-          className="bg-white/10 border-white/20 text-white placeholder-gray-400"
+          className="bg-white/10 border-white/20 text-white placeholder-gray-400 focus:border-purple-400 focus:ring-2 focus:ring-purple-400/50 transition-all"
         />
 
-        <Button type="submit" loading={loading} className="w-full" size="lg">
+        <Button
+          type="submit"
+          loading={loading}
+          className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 hover:shadow-xl hover:scale-105 transition-all"
+          size="lg"
+        >
           Sign In
         </Button>
       </form>
@@ -73,7 +78,7 @@ const LoginForm = ({ switchToSignup }: LoginFormProps) => {
           Don&apos;t have an account?{" "}
           <button
             onClick={switchToSignup}
-            className="text-brand-400 hover:text-brand-300 font-semibold"
+            className="text-purple-300 hover:text-purple-200 font-semibold transition-colors"
           >
             Sign up here
           </button>

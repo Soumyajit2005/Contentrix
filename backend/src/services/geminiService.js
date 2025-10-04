@@ -178,78 +178,51 @@ ${originalContent}${fileContext}`
 
   static async analyzeContentAndSuggestPlatforms(content, files = []) {
     try {
-      const fileContext = files.length > 0 
+      console.log('Gemini analyzing content, length:', content?.length || 0, 'files:', files.length);
+
+      const fileContext = files.length > 0
         ? `\n\nAttached Files Analysis:\n${files.map(f => `- ${f.mimetype.toUpperCase()} file: "${f.originalname}" (${Math.round(f.size/1024)}KB)`).join('\n')}`
         : '';
 
-      const prompt = `As an expert content strategist with deep knowledge of digital platforms and audience behavior, analyze the following content and recommend the most effective platforms for maximum reach and engagement.
+      const prompt = `Analyze this content and recommend the 5-7 BEST platforms for maximum engagement.
 
-CONTENT TO ANALYZE:
+CONTENT:
 ${content}${fileContext}
 
-COMPREHENSIVE ANALYSIS REQUIRED:
-1. Content categorization and audience identification
-2. Optimal platform selection from diverse digital ecosystem
-3. Platform-specific adaptation strategies
-4. Engagement optimization recommendations
+Available platforms: LinkedIn, Twitter/X, Instagram, Facebook, TikTok, YouTube, Medium, Reddit, ProductHunt, GitHub
 
-Consider these platform categories:
-- Professional Networks: LinkedIn, AngelList, Wellfound, Glassdoor
-- Social Media: Twitter/X, Instagram, Facebook, TikTok, Snapchat, BeReal
-- Content Communities: Reddit, Discord, Slack communities, Telegram
-- Creative Platforms: Pinterest, Behance, Dribbble, DeviantArt, Figma Community
-- Video Platforms: YouTube, Vimeo, Twitch, YouTube Shorts, Instagram Reels
-- Publishing: Medium, Substack, Hashnode, Dev.to, Ghost, WordPress
-- Professional Forums: Stack Overflow, GitHub, ProductHunt, Indie Hackers
-- Niche Communities: Quora, Clubhouse, Spaces, specialized forums
-- E-commerce/Review: Amazon, Etsy, Trustpilot, Google Reviews
-- News/Discussion: Hacker News, Mastodon, Threads, Bluesky
-
-Return response as JSON with this structure:
+Return JSON:
 {
   "contentAnalysis": {
-    "primaryCategory": "content main category",
-    "secondaryCategories": ["related", "categories"],
-    "contentType": "text/image/video/document/mixed",
-    "complexity": "beginner/intermediate/advanced",
-    "targetAudience": "detailed audience description",
-    "tone": "professional/casual/educational/entertainment/inspirational",
-    "keyTopics": ["main", "topics", "covered"],
-    "contentLength": "short/medium/long",
+    "primaryCategory": "main category",
+    "targetAudience": "audience description",
+    "tone": "professional/casual/educational",
+    "keyTopics": ["topic1", "topic2", "topic3"],
     "engagementPotential": "low/medium/high",
-    "viralPotential": "low/medium/high",
-    "demographicAppeal": "age groups and interests most likely to engage"
+    "viralPotential": "low/medium/high"
   },
   "suggestedPlatforms": [
     {
-      "id": "platform_identifier",
+      "id": "platform_id",
       "name": "Platform Name",
-      "category": "Platform category",
-      "icon": "appropriate emoji",
-      "description": "Platform overview and unique value",
+      "icon": "emoji",
       "relevanceScore": 85,
-      "audience": "Platform's primary user base",
-      "bestFor": "Content types that perform best",
-      "contentFormat": "Optimal content structure",
-      "engagementStyle": "How users interact",
-      "competitionLevel": "low/medium/high",
-      "organicReach": "Platform's organic visibility",
+      "bestFor": "why this platform",
       "postingGuidance": {
-        "optimalLength": "specific character/word limits",
-        "bestTimes": ["optimal posting schedule"],
-        "hashtags": "hashtag strategy and recommendations",
-        "formatting": ["specific formatting tips"],
-        "engagement": ["proven engagement tactics"],
-        "bestPractices": ["platform-specific optimization tips"],
-        "contentAdaptation": "how to modify content for this platform"
+        "optimalLength": "length",
+        "bestTimes": ["time1", "time2"],
+        "hashtags": "strategy",
+        "contentAdaptation": "how to adapt"
       }
     }
   ]
 }
 
-Suggest 20-30 platforms with relevance scores above 70. Focus on platforms where this specific content type and audience would thrive. Provide actionable, specific guidance for each platform.`;
+Suggest 5-7 BEST platforms with relevance scores above 80. Focus only on platforms where this specific content type would perform BEST. Be concise but actionable.`;
 
+      console.log('Sending prompt to Gemini API...');
       const response = await this.generateContent(prompt);
+      console.log('Gemini API response received, length:', response?.length || 0);
 
       // Parse JSON response, handling markdown code blocks
       try {
@@ -265,15 +238,20 @@ Suggest 20-30 platforms with relevance scores above 70. Focus on platforms where
         // Clean up extra whitespace
         jsonString = jsonString.trim();
 
-        return JSON.parse(jsonString);
+        const parsed = JSON.parse(jsonString);
+        console.log('Successfully parsed Gemini response');
+        return parsed;
       } catch (parseError) {
         console.error('JSON parse error in analysis:', parseError);
-        console.log('Raw response:', response.substring(0, 500));
+        console.log('Raw response (first 500 chars):', response.substring(0, 500));
+        console.log('Using fallback analysis...');
         return this.getFallbackAnalysis(content, files);
       }
     } catch (error) {
       console.error('Content analysis error:', error);
+      console.error('Error details:', error.message);
       // Fallback to basic analysis
+      console.log('Using fallback analysis due to error...');
       return this.getFallbackAnalysis(content, files);
     }
   }

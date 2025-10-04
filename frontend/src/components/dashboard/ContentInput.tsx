@@ -55,9 +55,11 @@ const ContentInput = ({ onContentRepurposed }: ContentInputProps) => {
   };
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border p-6">
-      <h2 className="text-xl font-semibold text-gray-900 mb-6 flex items-center gap-2">
-        <Upload className="h-5 w-5 text-brand-500" />
+    <div className="bg-white rounded-2xl shadow-xl border border-purple-100 p-6 animate-fadeIn">
+      <h2 className="text-xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent mb-6 flex items-center gap-2">
+        <div className="p-2 bg-gradient-to-r from-purple-100 to-blue-100 rounded-lg">
+          <Upload className="h-5 w-5 text-purple-600" />
+        </div>
         Original Content
       </h2>
 
@@ -69,7 +71,7 @@ const ContentInput = ({ onContentRepurposed }: ContentInputProps) => {
           <textarea
             value={content}
             onChange={(e) => setContent(e.target.value)}
-            className="w-full h-48 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-transparent resize-none"
+            className="w-full h-48 px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 resize-none transition-all"
             placeholder="Paste your blog post, article, or any long-form content here..."
           />
         </div>
@@ -90,10 +92,10 @@ const ContentInput = ({ onContentRepurposed }: ContentInputProps) => {
                   className="sr-only"
                 />
                 <div
-                  className={`p-4 rounded-lg border-2 transition-all ${
+                  className={`p-4 rounded-xl border-2 transition-all duration-300 ${
                     selectedPlatform === platform.id
-                      ? "border-brand-500 bg-brand-50"
-                      : "border-gray-200 hover:border-gray-300"
+                      ? "border-purple-500 bg-gradient-to-r from-purple-50 to-blue-50 shadow-md scale-105"
+                      : "border-gray-200 hover:border-purple-300 hover:shadow-sm"
                   }`}
                 >
                   <div className="flex items-center gap-3">
@@ -114,7 +116,7 @@ const ContentInput = ({ onContentRepurposed }: ContentInputProps) => {
           onClick={handleRepurpose}
           disabled={!content.trim() || loading}
           loading={loading}
-          className="w-full flex items-center gap-2"
+          className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300"
           size="lg"
         >
           <Zap className="h-5 w-5" />

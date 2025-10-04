@@ -77,10 +77,15 @@ app.use((req, res) => {
 
 // For local development
 if (process.env.NODE_ENV !== 'production') {
-  app.listen(PORT, () => {
+  const server = app.listen(PORT, () => {
     console.log(`🚀 Server running on port ${PORT}`);
     console.log(`📍 Environment: ${process.env.NODE_ENV}`);
   });
+
+  // Increase timeout for AI operations (2 minutes)
+  server.timeout = 120000;
+  server.keepAliveTimeout = 120000;
+  server.headersTimeout = 120000;
 }
 
 // Export for Vercel

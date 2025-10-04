@@ -57,26 +57,42 @@ const ProjectCreation = ({ onProjectCreated, onCancel }: ProjectCreationProps) =
       formData.append('name', form.name);
       formData.append('contentType', form.contentType);
       formData.append('smartDetect', form.smartDetect.toString());
-      
+
       if (form.content) formData.append('content', form.content);
       if (form.url) formData.append('url', form.url);
-      
+
       // Add files
       files.forEach(file => {
         formData.append('files', file);
       });
 
+      // Show a progress message
+      toast.loading("Creating project and analyzing content...", { id: 'project-creation' });
+
       const response = await api.post('/projects', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
+        timeout: 120000, // 2 minutes for AI analysis
       });
-      
-      toast.success("Project created successfully!");
+
+      toast.success("Project created successfully!", { id: 'project-creation' });
       onProjectCreated(response.data.id);
     } catch (error) {
       console.error('Create project error:', error);
-      toast.error("Failed to create project");
+      const errorMessage = error instanceof Error ? error.message : 'Failed to create project';
+
+      // More helpful error messages
+      if (errorMessage.includes('timeout')) {
+        toast.error("AI analysis is taking longer than expected. The project may still be created. Please check your projects list.", {
+          id: 'project-creation',
+          duration: 6000
+        });
+      } else if (errorMessage.includes('Network')) {
+        toast.error("Network error. Please check your connection and try again.", { id: 'project-creation' });
+      } else {
+        toast.error(errorMessage, { id: 'project-creation' });
+      }
     } finally {
       setLoading(false);
     }
@@ -98,19 +114,22 @@ const ProjectCreation = ({ onProjectCreated, onCancel }: ProjectCreationProps) =
   };
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border max-w-4xl mx-auto">
+    <div className="bg-white rounded-2xl shadow-2xl border border-purple-100 max-w-4xl mx-auto animate-fadeIn">
       {/* Header */}
-      <div className="border-b px-6 py-4">
+      <div className="border-b border-purple-100 bg-gradient-to-r from-purple-50 to-blue-50 px-6 py-5 rounded-t-2xl">
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-xl font-semibold text-gray-900">
+            <h2 className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
               Create New Project
             </h2>
-            <p className="text-sm text-gray-600">
+            <p className="text-sm text-gray-600 mt-1">
               Upload content and let AI suggest the best platforms
             </p>
           </div>
-          <button onClick={onCancel} className="text-gray-400 hover:text-gray-600">
+          <button
+            onClick={onCancel}
+            className="text-gray-400 hover:text-purple-600 hover:bg-purple-100 p-2 rounded-lg transition-all"
+          >
             <X className="h-6 w-6" />
           </button>
         </div>
@@ -142,15 +161,17 @@ const ProjectCreation = ({ onProjectCreated, onCancel }: ProjectCreationProps) =
                 key={type}
                 type="button"
                 onClick={() => handleContentTypeChange(type as 'text' | 'url' | 'file')}
-                className={`p-6 border-2 rounded-lg text-center transition-all ${
+                className={`group p-6 border-2 rounded-xl text-center transition-all duration-300 ${
                   form.contentType === type
-                    ? 'border-brand-500 bg-brand-50 text-brand-700'
-                    : 'border-gray-200 hover:border-gray-300'
+                    ? 'border-purple-500 bg-gradient-to-br from-purple-50 to-blue-50 text-purple-700 shadow-lg scale-105'
+                    : 'border-gray-200 hover:border-purple-300 hover:shadow-md hover:scale-102'
                 }`}
               >
                 <div className="flex flex-col items-center gap-3">
-                  {icon}
-                  <span className="font-medium">{label}</span>
+                  <div className={`transition-transform duration-300 ${form.contentType === type ? 'scale-110' : 'group-hover:scale-110'}`}>
+                    {icon}
+                  </div>
+                  <span className="font-semibold">{label}</span>
                 </div>
               </button>
             ))}
@@ -166,7 +187,7 @@ const ProjectCreation = ({ onProjectCreated, onCancel }: ProjectCreationProps) =
             <textarea
               value={form.content || ''}
               onChange={(e) => setForm(prev => ({ ...prev, content: e.target.value }))}
-              className="w-full h-48 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-transparent resize-none"
+              className="w-full h-48 px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 resize-none transition-all"
               placeholder="Paste your blog post, article, or any content here..."
             />
           </div>
@@ -239,22 +260,27 @@ const ProjectCreation = ({ onProjectCreated, onCancel }: ProjectCreationProps) =
         )}
 
         {/* Smart Detection Toggle */}
-        <div className="flex items-center justify-between p-4 bg-blue-50 rounded-lg">
-          <div>
-            <h4 className="font-medium text-gray-900">Smart Platform Detection</h4>
-            <p className="text-sm text-gray-600">
-              Let AI recommend the best platforms for your content
-            </p>
+        <div className="flex items-center justify-between p-5 bg-gradient-to-r from-purple-50 to-blue-50 rounded-xl border border-purple-100 shadow-sm">
+          <div className="flex items-center gap-3">
+            <div className="p-2 bg-white rounded-lg shadow-sm">
+              <Sparkles className="h-5 w-5 text-purple-600" />
+            </div>
+            <div>
+              <h4 className="font-semibold text-gray-900">Smart Platform Detection</h4>
+              <p className="text-sm text-gray-600">
+                Let AI recommend the best platforms for your content
+              </p>
+            </div>
           </div>
           <button
             type="button"
             onClick={() => setForm(prev => ({ ...prev, smartDetect: !prev.smartDetect }))}
-            className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-              form.smartDetect ? 'bg-brand-600' : 'bg-gray-200'
+            className={`relative inline-flex h-7 w-12 items-center rounded-full transition-all duration-300 shadow-inner ${
+              form.smartDetect ? 'bg-gradient-to-r from-purple-600 to-blue-600' : 'bg-gray-300'
             }`}
           >
             <span
-              className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+              className={`inline-block h-5 w-5 transform rounded-full bg-white shadow-md transition-transform duration-300 ${
                 form.smartDetect ? 'translate-x-6' : 'translate-x-1'
               }`}
             />
@@ -262,18 +288,31 @@ const ProjectCreation = ({ onProjectCreated, onCancel }: ProjectCreationProps) =
         </div>
 
         {/* Action Buttons */}
-        <div className="flex gap-3">
-          <Button onClick={onCancel} variant="outline" className="flex-1">
+        <div className="flex gap-4 pt-2">
+          <Button
+            onClick={onCancel}
+            variant="outline"
+            className="flex-1 hover:bg-gray-50 transition-all"
+          >
             Cancel
           </Button>
           <Button
             onClick={analyzeContent}
             loading={loading}
             disabled={!canProceed()}
-            className="flex-1 flex items-center gap-2"
+            className="flex-1 flex items-center justify-center gap-2 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300"
           >
-            <Sparkles className="h-4 w-4" />
-            Create Project
+            {loading ? (
+              <>
+                <div className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent"></div>
+                Analyzing with AI...
+              </>
+            ) : (
+              <>
+                <Sparkles className="h-5 w-5" />
+                Create Project
+              </>
+            )}
           </Button>
         </div>
       </div>
