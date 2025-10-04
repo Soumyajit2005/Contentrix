@@ -250,7 +250,27 @@ Return response as JSON with this structure:
 Suggest 20-30 platforms with relevance scores above 70. Focus on platforms where this specific content type and audience would thrive. Provide actionable, specific guidance for each platform.`;
 
       const response = await this.generateContent(prompt);
-      return JSON.parse(response);
+
+      // Parse JSON response, handling markdown code blocks
+      try {
+        let jsonString = response;
+
+        // Remove markdown code block formatting if present
+        if (jsonString.includes('```json')) {
+          jsonString = jsonString.replace(/```json\s*\n?/g, '').replace(/\n?\s*```/g, '');
+        } else if (jsonString.includes('```')) {
+          jsonString = jsonString.replace(/```\s*\n?/g, '').replace(/\n?\s*```/g, '');
+        }
+
+        // Clean up extra whitespace
+        jsonString = jsonString.trim();
+
+        return JSON.parse(jsonString);
+      } catch (parseError) {
+        console.error('JSON parse error in analysis:', parseError);
+        console.log('Raw response:', response.substring(0, 500));
+        return this.getFallbackAnalysis(content, files);
+      }
     } catch (error) {
       console.error('Content analysis error:', error);
       // Fallback to basic analysis

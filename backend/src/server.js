@@ -7,9 +7,24 @@ require("dotenv").config();
 const authRoutes = require("./routes/auth");
 const contentRoutes = require("./routes/content");
 const userRoutes = require("./routes/user");
+const dbInitializer = require("./utils/dbInit");
+const storageInitializer = require("./utils/storageInit");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
+
+// Auto-initialize database and storage on startup
+(async () => {
+  try {
+    console.log('🔧 Auto-initializing database and storage...');
+    await dbInitializer.initialize();
+    await storageInitializer.initialize();
+    console.log('✅ Auto-initialization completed');
+  } catch (error) {
+    console.warn('⚠️ Auto-initialization failed (this is normal on first run):', error.message);
+    console.log('💡 You can manually initialize by calling POST /api/init/setup');
+  }
+})();
 
 // Middleware
 app.use(helmet());
@@ -29,12 +44,14 @@ app.use(express.urlencoded({ extended: true, limit: "50mb" }));
 
 // Import the new projects routes
 const projectRoutes = require("./routes/projects");
+const initRoutes = require("./routes/init");
 
 // Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/content", contentRoutes); // Keep existing for backward compatibility
 app.use("/api/projects", projectRoutes); // Add new project routes
 app.use("/api/user", userRoutes);
+app.use("/api/init", initRoutes); // Add initialization routes
 
 // Health check
 app.get("/health", (req, res) => {

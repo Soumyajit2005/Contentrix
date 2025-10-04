@@ -1,5 +1,6 @@
 const express = require('express');
 const supabase = require('../config/supabase');
+const dbInitializer = require('../utils/dbInit');
 
 const router = express.Router();
 
@@ -22,8 +23,22 @@ router.post('/signup', async (req, res) => {
       return res.status(400).json({ error: error.message });
     }
 
-    res.json({ 
-      user: data.user, 
+    // Create user profile in database
+    if (data.user) {
+      try {
+        await dbInitializer.createUserProfile(
+          data.user.id,
+          email,
+          fullName || null
+        );
+      } catch (profileError) {
+        console.error('Failed to create user profile:', profileError);
+        // Don't fail signup if profile creation fails
+      }
+    }
+
+    res.json({
+      user: data.user,
       session: data.session,
       message: 'Please check your email for verification link'
     });

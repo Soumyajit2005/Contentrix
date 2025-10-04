@@ -1,73 +1,78 @@
-import { ArrowRight, Sparkles } from "lucide-react";
-import Button from "@/components/ui/Button";
+"use client";
 
-interface HeroSectionProps {
-  onGetStarted: () => void;
-}
+import Link from "next/link";
 
-const HeroSection = ({ onGetStarted }: HeroSectionProps) => {
+const HeroSection = () => {
   return (
-    <div className="relative overflow-hidden bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
-        <div className="text-center">
-          <div className="flex justify-center mb-8">
-            <div className="bg-white/10 backdrop-blur-sm rounded-full p-4">
-              <Sparkles className="h-12 w-12 text-yellow-400 animate-spin-slow" />
+    <section id="hero" className="pt-32 pb-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-50">
+      <div className="max-w-7xl mx-auto">
+        <div className="grid lg:grid-cols-2 gap-12 items-center">
+          {/* Left Column - Text Content */}
+          <div className="space-y-8">
+            <div className="inline-block">
+              <span className="px-4 py-2 bg-purple-100 text-purple-700 rounded-full text-sm font-semibold">
+                🚀 AI-Powered Content Transformation
+              </span>
             </div>
-          </div>
 
-          <h1 className="text-5xl md:text-7xl font-bold text-white mb-6">
-            <span className="bg-gradient-to-r from-yellow-400 to-orange-500 bg-clip-text text-transparent">
-              RepurposePie
-            </span>
-          </h1>
+            <h1 className="text-5xl lg:text-6xl font-bold leading-tight">
+              Transform Your Content for{" "}
+              <span className="bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
+                Every Platform
+              </span>
+            </h1>
 
-          <p className="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto">
-            Transform your content into platform-perfect posts in seconds.
-            <span className="text-yellow-400 font-semibold">
-              {" "}
-              Save hours of work
-            </span>{" "}
-            with AI-powered repurposing.
-          </p>
+            <p className="text-xl text-gray-600 leading-relaxed">
+              Create platform-optimized content in seconds with AI. One piece of content becomes
+              Twitter threads, LinkedIn posts, Instagram captions, and more.
+            </p>
 
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
-            <Button
-              onClick={onGetStarted}
-              size="xl"
-              className="flex items-center gap-2"
-            >
-              Start Repurposing <ArrowRight className="h-5 w-5" />
-            </Button>
-            <Button
-              variant="outline"
-              size="xl"
-              className="border-white/30 text-white hover:bg-white/10"
-            >
-              Watch Demo
-            </Button>
-          </div>
+            <div className="flex flex-col sm:flex-row gap-4">
+              <Link
+                href="/auth"
+                className="px-8 py-4 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg font-semibold text-lg hover:shadow-2xl hover:scale-105 transition-all text-center"
+              >
+                Start Free Today
+              </Link>
+              <button
+                onClick={() => document.getElementById("how-it-works")?.scrollIntoView({ behavior: "smooth" })}
+                className="px-8 py-4 bg-white text-purple-600 border-2 border-purple-600 rounded-lg font-semibold text-lg hover:bg-purple-50 transition-all text-center"
+              >
+                See How It Works
+              </button>
+            </div>
 
-          {/* Features */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-16">
-            <div className="bg-black/20 backdrop-blur-sm rounded-xl p-6 border border-white/10">
-              <div className="text-4xl font-bold text-yellow-400 mb-2">
-                AI-Powered
+            <div className="flex items-center gap-8 pt-4">
+              <div>
+                <div className="text-3xl font-bold text-purple-600">20+</div>
+                <div className="text-gray-600">Platforms</div>
               </div>
-              <div className="text-gray-300">Intelligent content adaptation</div>
+              <div>
+                <div className="text-3xl font-bold text-blue-600">10x</div>
+                <div className="text-gray-600">Faster</div>
+              </div>
+              <div>
+                <div className="text-3xl font-bold text-indigo-600">Free</div>
+                <div className="text-gray-600">To Start</div>
+              </div>
             </div>
-            <div className="bg-black/20 backdrop-blur-sm rounded-xl p-6 border border-white/10">
-              <div className="text-4xl font-bold text-yellow-400 mb-2">10+</div>
-              <div className="text-gray-300">Platform formats supported</div>
+          </div>
+
+          {/* Right Column - Visual */}
+          <div className="relative">
+            <div className="relative z-10">
+              <img
+                src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80"
+                alt="Content Dashboard"
+                className="rounded-2xl shadow-2xl"
+              />
             </div>
-            <div className="bg-black/20 backdrop-blur-sm rounded-xl p-6 border border-white/10">
-              <div className="text-4xl font-bold text-yellow-400 mb-2">Fast</div>
-              <div className="text-gray-300">Content ready in seconds</div>
-            </div>
+            <div className="absolute -top-4 -right-4 w-72 h-72 bg-purple-300 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob"></div>
+            <div className="absolute -bottom-8 -left-4 w-72 h-72 bg-blue-300 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-2000"></div>
           </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 

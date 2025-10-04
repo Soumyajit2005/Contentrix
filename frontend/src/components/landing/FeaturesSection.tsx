@@ -1,117 +1,78 @@
-import {
-  Twitter,
-  Linkedin,
-  Video,
-  Instagram,
-  FileText,
-  Zap,
-  Clock,
-} from "lucide-react";
+"use client";
+
+import { Sparkles, Zap, Target, BarChart3, Globe, Shield } from "lucide-react";
 
 const FeaturesSection = () => {
-  const platforms = [
-    {
-      icon: <Twitter className="h-8 w-8" />,
-      title: "Twitter Threads",
-      description:
-        "Transform long-form content into engaging Twitter threads with optimal hashtags and threading structure.",
-      color: "text-blue-400",
-    },
-    {
-      icon: <Linkedin className="h-8 w-8" />,
-      title: "LinkedIn Posts",
-      description:
-        "Create professional LinkedIn content with proper formatting, insights, and industry-relevant hashtags.",
-      color: "text-blue-600",
-    },
-    {
-      icon: <Video className="h-8 w-8" />,
-      title: "TikTok Scripts",
-      description:
-        "Generate viral TikTok video scripts with hooks, visual cues, and trending elements.",
-      color: "text-purple-400",
-    },
-    {
-      icon: <Instagram className="h-8 w-8" />,
-      title: "Instagram Posts",
-      description:
-        "Create Instagram captions with carousel suggestions and trending hashtags.",
-      color: "text-pink-400",
-    },
-  ];
-
   const features = [
     {
+      icon: <Sparkles className="h-8 w-8" />,
+      title: "AI-Powered Generation",
+      description: "Advanced AI understands your content and creates platform-optimized versions automatically with perfect formatting.",
+      gradient: "from-purple-500 to-pink-500"
+    },
+    {
       icon: <Zap className="h-8 w-8" />,
-      title: "AI-Powered",
-      description:
-        "Advanced AI analyzes your content and creates platform-optimized versions automatically.",
+      title: "Lightning Fast",
+      description: "Transform hours of work into seconds. Create content for 20+ platforms in one click with instant AI processing.",
+      gradient: "from-yellow-500 to-orange-500"
     },
     {
-      icon: <Clock className="h-8 w-8" />,
-      title: "Save Time",
-      description:
-        "Reduce content creation time from hours to minutes with intelligent automation.",
+      icon: <Target className="h-8 w-8" />,
+      title: "Platform Optimization",
+      description: "Each platform gets perfectly tailored content - character limits, hashtags, formatting, and engagement tactics.",
+      gradient: "from-blue-500 to-cyan-500"
     },
     {
-      icon: <FileText className="h-8 w-8" />,
-      title: "Text Input",
-      description:
-        "Simply paste your blog posts, articles, or any text content to get started.",
+      icon: <BarChart3 className="h-8 w-8" />,
+      title: "Smart Analytics",
+      description: "Track your content performance, time saved, and engagement metrics across all platforms in one dashboard.",
+      gradient: "from-green-500 to-emerald-500"
     },
+    {
+      icon: <Globe className="h-8 w-8" />,
+      title: "20+ Platforms",
+      description: "Twitter, LinkedIn, Instagram, TikTok, YouTube, Facebook, Medium, Reddit, and many more platforms supported.",
+      gradient: "from-indigo-500 to-purple-500"
+    },
+    {
+      icon: <Shield className="h-8 w-8" />,
+      title: "Secure & Private",
+      description: "Your content is encrypted and secure. We never share your data. Full GDPR compliance and data privacy.",
+      gradient: "from-red-500 to-pink-500"
+    }
   ];
 
   return (
-    <div className="bg-gray-50 py-24">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Platform Features */}
+    <section id="features" className="py-20 px-4 sm:px-6 lg:px-8 bg-white">
+      <div className="max-w-7xl mx-auto">
         <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold text-gray-900 mb-4">
-            One Upload, <span className="text-brand-600">Multiple Formats</span>
+          <h2 className="text-4xl lg:text-5xl font-bold mb-4">
+            Everything You Need to{" "}
+            <span className="bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
+              Scale Your Content
+            </span>
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Transform your content for every major platform with AI that
-            understands each platform&apos;s unique requirements.
+            Powerful features designed to transform your content workflow and multiply your reach
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-24">
-          {platforms.map((platform, index) => (
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {features.map((feature, index) => (
             <div
               key={index}
-              className="bg-white rounded-xl p-8 shadow-sm border hover:shadow-md transition-shadow"
+              className="group p-8 rounded-2xl bg-gradient-to-br from-gray-50 to-white border border-gray-200 hover:border-purple-300 hover:shadow-xl transition-all duration-300"
             >
-              <div className={`${platform.color} mb-4`}>{platform.icon}</div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-3">
-                {platform.title}
-              </h3>
-              <p className="text-gray-600">{platform.description}</p>
-            </div>
-          ))}
-        </div>
-
-        {/* Additional Features */}
-        <div className="text-center mb-16">
-          <h3 className="text-3xl font-bold text-gray-900 mb-4">
-            Why Choose RepurposePie?
-          </h3>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {features.map((feature, index) => (
-            <div key={index} className="text-center">
-              <div className="bg-brand-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4 text-brand-600">
+              <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${feature.gradient} flex items-center justify-center text-white mb-4 group-hover:scale-110 transition-transform`}>
                 {feature.icon}
               </div>
-              <h4 className="text-lg font-semibold text-gray-900 mb-2">
-                {feature.title}
-              </h4>
-              <p className="text-gray-600">{feature.description}</p>
+              <h3 className="text-xl font-bold mb-3">{feature.title}</h3>
+              <p className="text-gray-600 leading-relaxed">{feature.description}</p>
             </div>
           ))}
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 

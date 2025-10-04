@@ -30,10 +30,14 @@ Transform your content for multiple social media platforms with AI-powered repur
 
 ### Prerequisites
 - Node.js 18+
-- Supabase account
+- Supabase account (free tier works!)
 - Google Gemini API key
 
-### Local Development
+### 📖 Complete Setup Guide
+
+**For detailed setup instructions, see [SETUP.md](./SETUP.md)**
+
+### Quick Local Development
 
 1. **Clone the repository**
 ```bash
@@ -41,27 +45,67 @@ git clone https://github.com/Soumyajit2005/Repurpose-pie.git
 cd Repurpose-pie
 ```
 
-2. **Setup Backend**
+2. **Install dependencies**
 ```bash
+# Install all dependencies at once
+npm run install:all
+# OR manually:
+cd backend && npm install
+cd ../frontend && npm install
+```
+
+3. **Setup Supabase**
+   - Create new project at [Supabase](https://supabase.com)
+   - Get your project URL and API keys
+   - See [SETUP.md](./SETUP.md) for detailed instructions
+
+4. **Configure environment variables**
+
+Backend `.env`:
+```env
+SUPABASE_URL=your_supabase_url
+SUPABASE_ANON_KEY=your_anon_key
+SUPABASE_SERVICE_KEY=your_service_key
+GEMINI_API_KEY=your_gemini_key
+```
+
+Frontend `.env.local`:
+```env
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key
+NEXT_PUBLIC_API_URL=http://localhost:5000/api
+```
+
+5. **Initialize Database**
+```bash
+# Option 1: Use migration script
 cd backend
-npm install
-cp .env.example .env
-# Edit .env with your credentials
-npm run dev
+npm run migrate
+# Then copy and run the displayed SQL in Supabase Dashboard
+
+# Option 2: Manual setup
+# Copy database/init.sql content into Supabase SQL Editor and run it
+# Then run database/storage-policies.sql
 ```
 
-3. **Setup Frontend**  
+6. **Create Storage Buckets**
+   - Go to Supabase Dashboard > Storage
+   - Create buckets: `project-files`, `content-files`, `user-avatars`
+   - See [SETUP.md](./SETUP.md) for configuration details
+
+7. **Start the application**
 ```bash
-cd frontend
-npm install
-cp .env.example .env.local
-# Edit .env.local with your credentials
+# From root directory
 npm run dev
+# OR separately:
+# Terminal 1: cd backend && npm run dev
+# Terminal 2: cd frontend && npm run dev
 ```
 
-4. **Access the application**
-- Frontend: http://localhost:3000
-- Backend API: http://localhost:5000
+8. **Access the application**
+   - Frontend: http://localhost:3000
+   - Backend API: http://localhost:5000
+   - Health check: http://localhost:5000/health
 
 ## 🌐 Deployment
 
@@ -127,6 +171,13 @@ PORT=5000
 NODE_ENV=development
 FRONTEND_URL=http://localhost:3000
 ```
+
+## 📖 Documentation
+
+- **🎯 [Getting Started](./GETTING_STARTED.md)** - 10-minute quick start guide
+- **📚 [Complete Setup Guide](./SETUP.md)** - Detailed setup instructions
+- **⚡ [Quick Reference](./QUICK_REFERENCE.md)** - Commands and API reference
+- **🔄 [Improvements Log](./IMPROVEMENTS.md)** - All changes and enhancements
 
 ## 🤝 Contributing
 

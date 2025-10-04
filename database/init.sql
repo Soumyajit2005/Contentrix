@@ -243,23 +243,5 @@ CREATE INDEX IF NOT EXISTS idx_project_files_project_id ON public.project_files(
 CREATE TRIGGER update_profiles_updated_at BEFORE UPDATE ON public.profiles
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
--- Insert some sample platform configurations (optional)
--- You can customize these based on your supported platforms
-INSERT INTO public.content_history (user_id, action, content_data) 
-VALUES (
-  '00000000-0000-0000-0000-000000000000',
-  'system_init',
-  '{
-    "supported_platforms": [
-      "twitter", "linkedin", "facebook", "instagram", "youtube", 
-      "tiktok", "pinterest", "reddit", "medium", "blog"
-    ],
-    "platform_limits": {
-      "twitter": {"max_length": 280, "supports_images": true, "supports_videos": true},
-      "linkedin": {"max_length": 3000, "supports_images": true, "supports_videos": true},
-      "facebook": {"max_length": 63206, "supports_images": true, "supports_videos": true},
-      "instagram": {"max_length": 2200, "supports_images": true, "supports_videos": true},
-      "youtube": {"max_length": 5000, "supports_images": true, "supports_videos": true}
-    }
-  }'
-) ON CONFLICT DO NOTHING;
+-- Platform configurations are now handled in the application code
+-- No initial data insertion needed

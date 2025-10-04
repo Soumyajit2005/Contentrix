@@ -12,6 +12,8 @@
     "start": "npm run start:frontend",
     "start:frontend": "cd frontend && npm run start",
     "install:all": "npm install && cd frontend && npm install && cd ../backend && npm install",
+    "setup": "node scripts/setup.js",
+    "migrate": "cd backend && npm run migrate",
     "deploy": "vercel"
   },
   "keywords": ["ai", "content", "repurposing", "social-media", "nextjs", "nodejs"],

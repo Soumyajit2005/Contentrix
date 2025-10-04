@@ -7,9 +7,9 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "RepurposePie - AI Content Repurposing Engine",
+  title: "Contentrix - Transform Your Content for Every Platform",
   description:
-    "Transform your content into platform-perfect posts in seconds. Save 8-12 hours weekly with AI-powered repurposing.",
+    "AI-powered content transformation for 20+ platforms. Turn one piece of content into Twitter threads, LinkedIn posts, Instagram captions, and more in seconds.",
 };
 
 export default function RootLayout({

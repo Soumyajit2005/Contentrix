@@ -170,6 +170,40 @@ router.post('/content/:id/approve', authenticateUser, async (req, res) => {
   }
 });
 
+// Delete a project
+router.delete('/:id', authenticateUser, async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const projectId = req.params.id;
+
+    // Verify project belongs to user
+    const { data: project, error: fetchError } = await require('../config/supabase')
+      .from('projects')
+      .select('id')
+      .eq('id', projectId)
+      .eq('user_id', userId)
+      .single();
+
+    if (fetchError || !project) {
+      return res.status(404).json({ error: 'Project not found' });
+    }
+
+    // Delete project (cascade will handle related records)
+    const { error: deleteError } = await require('../config/supabase')
+      .from('projects')
+      .delete()
+      .eq('id', projectId)
+      .eq('user_id', userId);
+
+    if (deleteError) throw deleteError;
+
+    res.json({ message: 'Project deleted successfully' });
+  } catch (error) {
+    console.error('Delete project error:', error);
+    res.status(500).json({ error: 'Failed to delete project' });
+  }
+});
+
 // Error handling middleware for multer
 router.use((error, req, res, next) => {
   if (error instanceof multer.MulterError) {
