@@ -66,6 +66,7 @@ const HowItWorks = () => {
               </div>
               <div className="flex-1">
                 <div className="relative group">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={step.image}
                     alt={step.title}

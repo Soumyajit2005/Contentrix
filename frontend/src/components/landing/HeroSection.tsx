@@ -61,6 +61,7 @@ const HeroSection = () => {
           {/* Right Column - Visual */}
           <div className="relative">
             <div className="relative z-10">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80"
                 alt="Content Dashboard"
