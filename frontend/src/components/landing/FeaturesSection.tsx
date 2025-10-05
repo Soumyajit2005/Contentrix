@@ -152,7 +152,7 @@ const FeaturesSection = () => {
           <h2 className={`text-4xl lg:text-5xl font-bold mb-4 transition-colors duration-500 ${
             theme === "dark" ? "text-white" : "text-gray-900"
           }`}>
-            What's{" "}
+            What&apos;s{" "}
             <span className={`bg-gradient-to-r bg-clip-text text-transparent ${
               theme === "dark"
                 ? "from-purple-400 to-blue-400"
@@ -164,7 +164,7 @@ const FeaturesSection = () => {
           <p className={`text-xl max-w-3xl mx-auto transition-colors duration-500 ${
             theme === "dark" ? "text-gray-300" : "text-gray-600"
           }`}>
-            Exciting new features we're building to supercharge your content creation
+            Exciting new features we&apos;re building to supercharge your content creation
           </p>
         </div>
 
