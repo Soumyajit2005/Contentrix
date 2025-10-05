@@ -1,5 +1,6 @@
 "use client";
 
+import { ThemeProvider } from "@/contexts/ThemeContext";
 import Navbar from "./Navbar";
 import HeroSection from "./HeroSection";
 import FeaturesSection from "./FeaturesSection";
@@ -15,15 +16,17 @@ const LandingPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white">
-      <Navbar onNavigate={handleNavigate} />
-      <HeroSection />
-      <FeaturesSection />
-      <HowItWorks />
-      <ContactSection />
-      <HelpSection />
-      <Footer />
-    </div>
+    <ThemeProvider>
+      <div className="min-h-screen transition-colors duration-500">
+        <Navbar onNavigate={handleNavigate} />
+        <HeroSection />
+        <FeaturesSection />
+        <HowItWorks />
+        <ContactSection />
+        <HelpSection />
+        <Footer />
+      </div>
+    </ThemeProvider>
   );
 };
 

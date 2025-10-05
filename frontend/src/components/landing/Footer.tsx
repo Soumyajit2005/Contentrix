@@ -2,12 +2,18 @@
 
 import Link from "next/link";
 import { Github, Twitter, Linkedin, Mail } from "lucide-react";
+import { useTheme } from "@/contexts/ThemeContext";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
+  const { theme } = useTheme();
 
   return (
-    <footer className="bg-gray-900 text-gray-300">
+    <footer className={`transition-colors duration-500 ${
+      theme === "dark"
+        ? "bg-gray-950 text-gray-300 border-t border-gray-800"
+        : "bg-gray-900 text-gray-300"
+    }`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid md:grid-cols-4 gap-8 mb-8">
           {/* Brand */}
@@ -41,34 +47,64 @@ const Footer = () => {
 
           {/* Product */}
           <div>
-            <h3 className="text-white font-semibold mb-4">Product</h3>
+            <h3 className={`font-semibold mb-4 transition-colors duration-500 ${
+              theme === "dark" ? "text-gray-100" : "text-white"
+            }`}>Product</h3>
             <ul className="space-y-2">
-              <li><button onClick={() => document.getElementById("features")?.scrollIntoView({ behavior: "smooth" })} className="hover:text-purple-400 transition-colors">Features</button></li>
-              <li><button onClick={() => document.getElementById("how-it-works")?.scrollIntoView({ behavior: "smooth" })} className="hover:text-purple-400 transition-colors">How It Works</button></li>
-              <li><Link href="/auth" className="hover:text-purple-400 transition-colors">Get Started</Link></li>
-              <li><a href="#" className="hover:text-purple-400 transition-colors">Pricing</a></li>
+              <li><button onClick={() => document.getElementById("features")?.scrollIntoView({ behavior: "smooth" })} className={`transition-colors duration-300 ${
+                theme === "dark" ? "hover:text-purple-400" : "hover:text-purple-400"
+              }`}>Features</button></li>
+              <li><button onClick={() => document.getElementById("how-it-works")?.scrollIntoView({ behavior: "smooth" })} className={`transition-colors duration-300 ${
+                theme === "dark" ? "hover:text-purple-400" : "hover:text-purple-400"
+              }`}>How It Works</button></li>
+              <li><Link href="/auth" className={`transition-colors duration-300 ${
+                theme === "dark" ? "hover:text-purple-400" : "hover:text-purple-400"
+              }`}>Get Started</Link></li>
+              <li><a href="#" className={`transition-colors duration-300 ${
+                theme === "dark" ? "hover:text-purple-400" : "hover:text-purple-400"
+              }`}>Pricing</a></li>
             </ul>
           </div>
 
           {/* Resources */}
           <div>
-            <h3 className="text-white font-semibold mb-4">Resources</h3>
+            <h3 className={`font-semibold mb-4 transition-colors duration-500 ${
+              theme === "dark" ? "text-gray-100" : "text-white"
+            }`}>Resources</h3>
             <ul className="space-y-2">
-              <li><button onClick={() => document.getElementById("help")?.scrollIntoView({ behavior: "smooth" })} className="hover:text-purple-400 transition-colors">Help Center</button></li>
-              <li><a href="#" className="hover:text-purple-400 transition-colors">Documentation</a></li>
-              <li><a href="#" className="hover:text-purple-400 transition-colors">Tutorials</a></li>
-              <li><a href="https://github.com/Soumyajit2005/Repurpose-pie" target="_blank" rel="noopener noreferrer" className="hover:text-purple-400 transition-colors">GitHub</a></li>
+              <li><button onClick={() => document.getElementById("help")?.scrollIntoView({ behavior: "smooth" })} className={`transition-colors duration-300 ${
+                theme === "dark" ? "hover:text-purple-400" : "hover:text-purple-400"
+              }`}>Help Center</button></li>
+              <li><a href="#" className={`transition-colors duration-300 ${
+                theme === "dark" ? "hover:text-purple-400" : "hover:text-purple-400"
+              }`}>Documentation</a></li>
+              <li><a href="#" className={`transition-colors duration-300 ${
+                theme === "dark" ? "hover:text-purple-400" : "hover:text-purple-400"
+              }`}>Tutorials</a></li>
+              <li><a href="https://github.com/Soumyajit2005/Repurpose-pie" target="_blank" rel="noopener noreferrer" className={`transition-colors duration-300 ${
+                theme === "dark" ? "hover:text-purple-400" : "hover:text-purple-400"
+              }`}>GitHub</a></li>
             </ul>
           </div>
 
           {/* Company */}
           <div>
-            <h3 className="text-white font-semibold mb-4">Company</h3>
+            <h3 className={`font-semibold mb-4 transition-colors duration-500 ${
+              theme === "dark" ? "text-gray-100" : "text-white"
+            }`}>Company</h3>
             <ul className="space-y-2">
-              <li><button onClick={() => document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })} className="hover:text-purple-400 transition-colors">Contact</button></li>
-              <li><a href="#" className="hover:text-purple-400 transition-colors">Privacy Policy</a></li>
-              <li><a href="#" className="hover:text-purple-400 transition-colors">Terms of Service</a></li>
-              <li><a href="#" className="hover:text-purple-400 transition-colors">Cookie Policy</a></li>
+              <li><button onClick={() => document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })} className={`transition-colors duration-300 ${
+                theme === "dark" ? "hover:text-purple-400" : "hover:text-purple-400"
+              }`}>Contact</button></li>
+              <li><a href="#" className={`transition-colors duration-300 ${
+                theme === "dark" ? "hover:text-purple-400" : "hover:text-purple-400"
+              }`}>Privacy Policy</a></li>
+              <li><a href="#" className={`transition-colors duration-300 ${
+                theme === "dark" ? "hover:text-purple-400" : "hover:text-purple-400"
+              }`}>Terms of Service</a></li>
+              <li><a href="#" className={`transition-colors duration-300 ${
+                theme === "dark" ? "hover:text-purple-400" : "hover:text-purple-400"
+              }`}>Cookie Policy</a></li>
             </ul>
           </div>
         </div>
